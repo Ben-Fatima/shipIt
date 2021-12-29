@@ -11,4 +11,7 @@ class Warehouse extends Model
     public function camions(){
         return $this->hasMany(Camion::class);
     }
+    public function products(){
+        return $this->hasMany(Product::class);
+    }
 }

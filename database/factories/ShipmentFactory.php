@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Warehouse;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ShipmentFactory extends Factory
@@ -14,7 +15,7 @@ class ShipmentFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'destination_id'=>Warehouse::factory()
         ];
     }
 }
