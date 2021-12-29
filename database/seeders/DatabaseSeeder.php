@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\Camion;
 use App\Models\Product;
 use App\Models\Shipment;
+use App\Models\ShipmentItem;
+use App\Models\Stock;
 use App\Models\User;
 use App\Models\Warehouse;
 use Illuminate\Database\Seeder;
@@ -48,6 +50,15 @@ class DatabaseSeeder extends Seeder
         $warehouse1= Warehouse::factory()->create(); 
         $warehouse2= Warehouse::factory()->create(); 
         $warehouse3= Warehouse::factory()->create(); 
+        $stock1 = Stock::factory()->create([
+            'product_id'=>$product1->id,
+            'warehouse_id'=>$warehouse1->id
+        ]);
+        $stock_item= ShipmentItem::factory()->create([
+            'product_id'=>$product2->id,
+            'camion_id'=>$camion2->id,
+            'shipment_id'=>$shipment2->id
+        ]);
         
     }
     
