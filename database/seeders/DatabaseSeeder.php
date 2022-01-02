@@ -20,12 +20,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $user1 = User::factory()->create();
-        $user2 = User::factory()->create();
-        $user3 = User::factory()->create();
-        $user4 = User::factory()->create();
-        $user5 = User::factory()->create();
-        $user6 = User::factory()->create();
+        User::factory(6)->create();
         $shipment1 = Shipment::factory()->create();
         $shipment2 = Shipment::factory()->create();
         $shipment3 = Shipment::factory()->create();
