@@ -13,12 +13,18 @@
         "production": "mix --production"
     },
     "devDependencies": {
+        "@babel/preset-react": "^7.16.7",
         "axios": "^0.21",
         "laravel-mix": "^6.0.6",
         "lodash": "^4.17.19",
         "postcss": "^8.1.14"
     },
     "dependencies": {
-        "leaflet": "^1.7.1"
+        "leaflet": "^1.7.1",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2",
+        "react-redux": "^7.2.6",
+        "redux": "^4.1.2",
+        "redux-neat": "^1.0.1-alpha"
     }
 }
