@@ -8,13 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class ShipmentItem extends Model
 {
     use HasFactory;
-    public function camions(){
-        return $this->belongsTo(Camion::class);
-    }
+    protected $guarded = [];
+
     public function products(){
-        return $this->belongsTo(Product::class);
+        return $this->hasMany(Product::class);
     }
-    public function shipments(){
+    public function shipment(){
         return $this->belongsTo(Shipment::class);
     }
 }

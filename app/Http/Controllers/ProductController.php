@@ -9,16 +9,6 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $filters = [
-            "number" => "like",
-            "amount" => "like",
-            "due_at" => "date",
-            "paid_at" => "date",
-            "status" => "=",
-            "supplier_id" => "=",
-            "method" => "=",
-        ];
-
         $products = Product::latest()->get();
         /*foreach ($filters as $key => $type) {
             if (request($key) && $type == "like") {
@@ -50,29 +40,24 @@ class ProductController extends Controller
             "suppliers" => $options,
             "amount" => $products->sum("amount"),
         ]);*/
-        return view('products',['products'=>$products]);
+        return view('products.index',['products'=>$products]);
     }
     public function create()
     {
-        return view("create-products");
+        return view("products.create");
     }
    public function store()
     {
         $attributs = request()->validate([
-            "Name" => "required",
-            "Height" => "required|numeric",
-            "Width" => "required|numeric",
-            "Weight" => "required|numeric",
-            "Depth" => "required|numeric",
+            "name" => "required",
+            "height" => "required|numeric",
+            "width" => "required|numeric",
+            "weight" => "required|numeric",
+            "depth" => "required|numeric",
+            "quantity" => "required|numeric",
         ]);
-        Product::factory()->create([
-            "name" => $attributs["Name"],
-            "height" => $attributs["Height"],
-            "width" => $attributs["Width"],
-            "weight" => $attributs["Weight"],
-            "depth" => $attributs["Depth"],
-        ]);
-        return redirect("/");
+        Product::create($attributs);
+        return redirect("/products");
     }
     public function delete($id){
         $product = Product::findOrFail($id);

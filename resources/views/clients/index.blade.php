@@ -1,6 +1,7 @@
 <x-layout>
-    <x-title> Products list </x-title>
-    <a href="/products/create">
+    <x-title>Clients list</x-title>
+    <a class="block flex" href="/clients/create">
+        <div class="flex-grow"></div>
         <button
             class="
                 py-2
@@ -8,12 +9,11 @@
                 rounded-full
                 bg-orange-600
                 my-6
-                shadow
                 text-gray-200
                 hover:bg-orange-700
             "
         >
-            Add new product
+            Add new client
         </button></a
     >
 
@@ -33,7 +33,7 @@
                         uppercase
                     "
                 >
-                    name
+                    Name
                 </th>
                 <th
                     class="
@@ -48,53 +48,9 @@
                         uppercase
                     "
                 >
-                    weight
+                    Address
                 </th>
-                <th
-                    class="
-                        px-5
-                        py-3
-                        border-b-2 border-gray-200
-                        bg-stone-100
-                        text-left text-sm
-                        font-semibold
-                        text-gray-600
-                        tracking-wider
-                        uppercase
-                    "
-                >
-                    width
-                </th>
-                <th
-                    class="
-                        px-5
-                        py-3
-                        border-b-2 border-gray-200
-                        bg-stone-100
-                        text-left text-sm
-                        font-semibold
-                        text-gray-600
-                        tracking-wider
-                        uppercase
-                    "
-                >
-                    height
-                </th>
-                <th
-                    class="
-                        px-5
-                        py-3
-                        border-b-2 border-gray-200
-                        bg-stone-100
-                        text-left text-sm
-                        font-semibold
-                        text-gray-600
-                        tracking-wider
-                        uppercase
-                    "
-                >
-                    depth
-                </th>
+
                 <th
                     class="
                         px-5
@@ -128,25 +84,16 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($products as $product)
+            @foreach ($clients as $client)
             <tr>
                 <td class="p-5 border-b border-gray-200">
-                    {{$product->name}}
+                    {{$client->name}}
                 </td>
                 <td class="p-5 border-b border-gray-200">
-                    {{$product->weight}}
+                    {{$client->address}}
                 </td>
                 <td class="p-5 border-b border-gray-200">
-                    {{$product->width}}
-                </td>
-                <td class="p-5 border-b border-gray-200">
-                    {{$product->height}}
-                </td>
-                <td class="p-5 border-b border-gray-200">
-                    {{$product->depth}}
-                </td>
-                <td class="p-5 border-b border-gray-200">
-                    <form method="GET" action="/products/edit/{{$product->id}}">
+                    <form method="GET" action="/clients/edit/{{$client->id}}">
                         @csrf
                         <button
                             class="py-2 px-4 rounded bg-stone-100 text-gray-800"
@@ -157,7 +104,7 @@
                     </form>
                 </td>
                 <td class="p-5 border-b border-gray-200">
-                    <form method="POST" action="/products/{{$product->id}}">
+                    <form method="POST" action="/clients/{{$client->id}}">
                         @method('DELETE') @csrf
 
                         <button

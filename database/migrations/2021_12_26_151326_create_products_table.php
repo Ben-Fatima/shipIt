@@ -20,6 +20,7 @@ class CreateProductsTable extends Migration
             $table->double('height');
             $table->double('width');
             $table->double('depth');
+            $table->double('quantity');
             $table->timestamps();
         });
     }

@@ -18,7 +18,6 @@ class ShipmentItemFactory extends Factory
     {
         return [
             'product_id' => Product::factory(),
-            'camion_id' => Camion::factory(),
             'shipment_id' => Shipment::factory(),
             'quantity'=>$this->faker->randomNumber()
         ];
