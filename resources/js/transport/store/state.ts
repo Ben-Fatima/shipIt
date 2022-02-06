@@ -1,7 +1,8 @@
 import {getDistance} from 'geolib'
 import {Client, Shipment, State, Truck} from './types'
 
-export const initialState = makeInitialState((window as any).__DATA__)
+const jsonData = localStorage.getItem('store')
+export const initialState = jsonData ? JSON.parse(jsonData) : makeInitialState((window as any).__DATA__)
 
 function makeInitialState(data: any): State {
   const weights: Record<number, number> = {}

@@ -12,13 +12,19 @@ Version 1:
     ✔ Add clients list to trucks @done(22-02-06 17:08)
     ✔ Compute truck distance from clients list @done(22-02-06 17:27)
     ✔ Find clients list order to minimize the distance @done(22-02-06 22:16)
-  ☐ Show total distance @10m
-  ☐ Add Apply button @1h
-    ☐ Call the API to assign ships to trucks
-    ☐ Set the status of shipments to 'assigned'
-    ☐ Set the status of trucks to 'pending'
+  ✔ Show total distance @10m @done(22-02-06 22:26)
+  ✔ Add Apply button @1h @done(22-02-06 23:56)
+    ✔ Call the API to assign ships to trucks @done(22-02-06 23:57)
+    ✔ Set the status of shipments to 'assigned' @done(22-02-06 23:57)
+    ✔ Set the status of trucks to 'pending' @done(22-02-06 23:57)
+  ☐ Add Truck returned button (on trucks list page)
+    ☐ Change truck status to 'available'
+    ☐ Change associated shipments status to 'shipped'
+    ☐ dissociate shipments from truck
+  ☐ Edit buttons => remove
 
 Version 2: Add Leaflet Map:
+    ☐ Assign all with optimal affectations!
     ☐ Estimate tasks
     ☐ Draw the warehouse marker
     ☐ Draw the clients markers

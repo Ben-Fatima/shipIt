@@ -45,3 +45,4 @@ Route::post("/shipments/create", [shipmentController::class, "store"]);
 Route::delete("/shipments/{id}", [shipmentController::class, "delete"]);
 
 Route::get('/transport',[TransportController::class,"display"]);
+Route::post('/transport',[TransportController::class,"assign"]);

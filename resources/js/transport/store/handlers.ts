@@ -26,6 +26,28 @@ export function removeShipmentFromTruck(state: State, truck: Truck, shipment: Sh
   return state
 }
 
+export function assignAll(state: State) {
+  const trucks = generateAssignments(state)
+  state.trucks = trucks
+  const assignedShipmentsIds = new Set(trucks.flatMap((x) => x.shipments.map((x) => x.id)))
+  state.shipments = state.shipments.filter((x) => !assignedShipmentsIds.has(x.id))
+  return state
+}
+
+function generateAssignments(state: State): Truck[] {
+  const trucks = [...state.trucks]
+  for (const shipment of state.shipments) {
+    const freeTruck = trucks.find((x) => x.availableWeight >= shipment.weight)
+    if (freeTruck == null) continue
+    freeTruck.shipments.push(shipment)
+    freeTruck.availableWeight -= shipment.weight
+  }
+  for (const truck of trucks) {
+    updateTruck(state, truck)
+  }
+  return trucks
+}
+
 function updateTruck(state: State, truck: Truck) {
   truck.availableWeight = truck.weight - R.sum(truck.shipments.map((x) => x.weight))
   const clients = new Set(truck.shipments.map((x) => state.clients[x.clientId]))

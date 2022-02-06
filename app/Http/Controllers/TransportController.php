@@ -17,8 +17,21 @@ class TransportController extends Controller
             ],
             'clients' => Client::all(),
             'products' => Product::all(),
-            'trucks' => Truck::all(),
+            'trucks' => Truck::where('status', 'available')->get(),
             'shipments' => Shipment::with('items')->where('status', 'created')->get()
         ]);
+    }
+
+    public function assign() {
+        foreach (request('trucks') as ['id' => $id, 'shipments' => $shipmentIds]) {
+            foreach (Shipment::whereIn('id', $shipmentIds)->get() as $shipment) {
+                $shipment->truck_id = $id;
+                $shipment->status = 'assigned';
+                $shipment->save();
+            }
+            $truck = Truck::findOrFail($id);
+            $truck->status = 'pending';
+            $truck->save();
+        }
     }
 }
