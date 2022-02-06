@@ -19,7 +19,7 @@ class ShipmentItemFactory extends Factory
         return [
             'product_id' => Product::factory(),
             'shipment_id' => Shipment::factory(),
-            'quantity'=>$this->faker->randomNumber()
+            'quantity'=>$this->faker->numberBetween(1,10)
         ];
     }
 }

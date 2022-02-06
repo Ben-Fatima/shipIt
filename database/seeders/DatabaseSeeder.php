@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models;
 use App\Models\Client;
 use App\Models\Product;
 use App\Models\Shipment;
@@ -10,30 +9,31 @@ use App\Models\ShipmentItem;
 use App\Models\Truck;
 use App\Models\User;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
     public function run()
     {
-        User::factory()->create();
-        $product = Product::factory()->create();
-        $client = Client::factory()->create();
-        $truck = Truck::factory()->create();
-        
-        $ship = Shipment::factory()->create([
-            'truck_id' => $truck->id,
-            'client_id' => $client->id
+        User::factory()->create([
+            'name' => 'admin',
+            'password' => Hash::make('admin')
         ]);
-        $items = ShipmentItem::factory()->create([
-            'shipment_id' => $ship->id,
-            'product_id' => $product->id
-        ]);
-        
+
+        $products = Product::factory(10)->create();
+        $clients = Client::factory(10)->create();
+        Truck::factory(5)->create();
+
+        for ($i = 0; $i < 20; $i++) {
+            $shipment = Shipment::factory()->create([
+                'client_id' => $clients[$i % 10]
+            ]);
+            for ($j = 0; $j < 5; $j++) {
+                ShipmentItem::factory()->create([
+                    'shipment_id' => $shipment->id,
+                    'product_id' => $products[(5 * $i + $j) % 10]
+                ]);
+            }
+        }
     }
-    
 }

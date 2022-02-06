@@ -16,7 +16,7 @@ class TruckFactory extends Factory
     {
         return [
             'status' => 'available',
-            'max_weight' => $this->faker->randomNumber(),
+            'max_weight' => $this->faker->numberBetween(1000000, 5000000),
             'height' => $this->faker->randomNumber(),
             'width' => $this->faker->randomNumber(),
             'depth' => $this->faker->randomNumber(),

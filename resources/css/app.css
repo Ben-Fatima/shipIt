@@ -1,3 +1,6 @@
+@tailwind base;
+@tailwind components;
+
 .bg-beige {
   background-color: #eeeae8;
 }
@@ -10,3 +13,5 @@
 .h-big {
   height: 750px;
 }
+
+@tailwind utilities;

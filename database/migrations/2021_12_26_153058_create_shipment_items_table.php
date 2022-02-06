@@ -17,7 +17,7 @@ class CreateShipmentItemsTable extends Migration
             $table->id();
             $table->foreignId('product_id');
             $table->foreignId('shipment_id');
-            $table->double('quantity');
+            $table->bigInteger('quantity');
             $table->timestamps();
         });
     }

@@ -18,8 +18,8 @@ class ProductFactory extends Factory
             'height'=>$this->faker->randomNumber(),
             'width'=>$this->faker->randomNumber(),
             'depth'=>$this->faker->randomNumber(),
-            'weight'=>$this->faker->randomNumber(),
-            'quantity'=>$this->faker->randomNumber(),
+            'weight'=>$this->faker->numberBetween(50, 10000),
+            'quantity'=>$this->faker->numberBetween(1, 10000),
         ];
     }
 }

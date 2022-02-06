@@ -16,10 +16,10 @@ class CreateTrucksTable extends Migration
         Schema::create('trucks', function (Blueprint $table) {
             $table->id();
             $table->string('status');
-            $table->double('max_weight');
-            $table->double('height');
-            $table->double('width');
-            $table->double('depth');
+            $table->bigInteger('max_weight');
+            $table->bigInteger('height');
+            $table->bigInteger('width');
+            $table->bigInteger('depth');
             $table->double('longitude');
             $table->double('latitude');
             $table->timestamps();

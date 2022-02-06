@@ -1,0 +1,22 @@
+Version 1:
+  ✔ Add React and Redux @30m @done(22-02-06 00:23)
+  ✔ Show shipments @30m @started(22-02-06 00:26) @done(22-02-06 01:53) @lasted(1h27m8s)
+  ✔ Show Trucks @30m @started(22-02-06 01:53) @done(22-02-06 02:06) @lasted(13m31s)
+  Assigning shipments to trucks:
+    ✔ select shipment, click truck => selected ship move to clicked truck @30m @started(22-02-06 02:09) @done(22-02-06 02:47) @lasted(38m18s)
+    ✔ recompute available weight @10m @started(22-02-06 02:54) @done(22-02-06 03:18) @lasted(24m53s)
+  recompute minimal distance:
+    ☐ Define steps @1h
+    ☐ Do steps ...
+  ☐ Show total distance @10m
+  ☐ Add Apply button @1h
+    ☐ Call the API to assign ships to trucks
+    ☐ Set the status of shipments to 'assigned'
+    ☐ Set the status of trucks to 'pending'
+
+Version 2: Add Leaflet Map:
+    ☐ Estimate tasks
+    ☐ Draw the warehouse marker
+    ☐ Draw the clients markers
+    ☐ Add details to each client (...)
+    ☐ Draw paths of each truck

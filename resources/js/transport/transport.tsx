@@ -1,8 +1,8 @@
 import React from "react";
 import { render } from "react-dom";
-import { App } from "./transport/App";
-import { store } from "./transport/store";
 import { Provider } from "react-redux";
+import { App } from "./App";
+import { store } from "./store";
 
 render(
   <Provider store={store}>

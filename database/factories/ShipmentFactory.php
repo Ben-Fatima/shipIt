@@ -17,7 +17,6 @@ class ShipmentFactory extends Factory
     {
         return [
             'client_id' =>  Client::factory(),
-            'truck_id' => Truck::factory(),
             'reference' => $this->faker->word(),
             'status' => 'created'
         ];
