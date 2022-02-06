@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import React from "react";
 import { ShipmentBox } from ".";
 import { actions } from "../store";
@@ -12,13 +13,30 @@ export function TruckBox({ truck }: Props) {
         className="m-2 p-2 w-52 rounded-md border border-gray-300 cursor-pointer"
         onClick={() => actions.addSelectedShipmentToTruck(truck)}
       >
-        Ref: {truck.id} <br />
-        Available W: {truck.availableWeight / 1000} kg <br />
-        Distance: {truck.distance} km
+        <div>
+          <i className="fas fa-truck text-xs text-gray-500"></i>
+        </div>
+        <h3 className="text-center text-gray-800 font-semibold uppercase py-4">
+          {truck.id}
+        </h3>
+        <div className="w-2/3 mx-auto">
+          <p className="text-justify pb-4">
+            <i className="fas fa-weight-hanging px-1 text-orange-600"></i>
+            {truck.availableWeight / 1000} kg
+          </p>
+          <p className="text-justify pb-4">
+            <i className="fas fa-route px-1 text-orange-600"></i>
+            {truck.distance} km
+          </p>
+        </div>
       </div>
-      {truck.shipments.map((x) => (
-        <ShipmentBox key={x.id} truck={truck} shipment={x} />
-      ))}
+      <div className="border border-gray-200 rounded-md flex flex-wrap p-2 m-2">
+        {truck.shipments.map((x) => (
+          <motion.div initial={{ y: "-50vh" }} animate={{ y: 0 }}>
+            <ShipmentBox key={x.id} truck={truck} shipment={x} />
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 }
