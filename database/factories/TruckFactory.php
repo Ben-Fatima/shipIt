@@ -20,8 +20,8 @@ class TruckFactory extends Factory
             'height' => $this->faker->randomNumber(),
             'width' => $this->faker->randomNumber(),
             'depth' => $this->faker->randomNumber(),
-            'longitude' => $this->faker->randomNumber(),
-            'latitude' => $this->faker->randomNumber(),
+            'longitude' => env('WAREHOUSE_LAT'),
+            'latitude' => env('WAREHOUSE_LNG'),
         ];
     }
 }

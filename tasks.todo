@@ -6,8 +6,12 @@ Version 1:
     ✔ select shipment, click truck => selected ship move to clicked truck @30m @started(22-02-06 02:09) @done(22-02-06 02:47) @lasted(38m18s)
     ✔ recompute available weight @10m @started(22-02-06 02:54) @done(22-02-06 03:18) @lasted(24m53s)
   recompute minimal distance:
-    ☐ Define steps @1h
-    ☐ Do steps ...
+    ✔ Add warehouse and clients to state @done(22-02-06 15:28)
+    ✔ Write function to compute distance @done(22-02-06 16:04)
+    ✔ Compute all distances between clients and warehouse @done(22-02-06 16:33)
+    ✔ Add clients list to trucks @done(22-02-06 17:08)
+    ✔ Compute truck distance from clients list @done(22-02-06 17:27)
+    ✔ Find clients list order to minimize the distance @done(22-02-06 22:16)
   ☐ Show total distance @10m
   ☐ Add Apply button @1h
     ☐ Call the API to assign ships to trucks

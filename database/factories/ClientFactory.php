@@ -14,10 +14,14 @@ class ClientFactory extends Factory
     public function definition()
     {
         return [
-            'name'=> $this->faker->name(),
-            'address'=> $this->faker->address(),
-            'longitude'=>$this->faker->randomNumber(),
-            'latitude'=>$this->faker->randomNumber(),
+            'name' => $this->faker->name(),
+            'address' => $this->faker->address(),
+            'latitude' => random(32, 34),
+            'longitude' => - random(4, 7),
         ];
     }
+}
+
+function random($min, $max) {
+    return $min + ($max - $min) * (mt_rand() / mt_getrandmax());
 }
