@@ -7,6 +7,7 @@ export type Shipment = {
 
 export type Truck = {
   id: number
+  color: string
   weight: number
   availableWeight: number
   distance: number

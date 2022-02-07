@@ -2,8 +2,8 @@ import axios from 'axios'
 import * as R from 'ramda'
 import React from 'react'
 import {ShipmentBox, TruckBox} from './components'
+import {MapView} from './components/MapView'
 import {actions, useStoreState} from './store'
-import {assignAll} from './store/handlers'
 
 export function App() {
   const {shipments, trucks} = useStoreState()
@@ -36,6 +36,7 @@ export function App() {
       ))}
       <hr />
       <div className="m-2 text-2xl text-right">Total distance: {R.sum(trucks.map((x) => x.distance)) / 1000} km</div>
+      <MapView />
       <button onClick={apply} className="m-2 py-2 px-5 text-xl bg-orange-800 text-white">
         Apply
       </button>

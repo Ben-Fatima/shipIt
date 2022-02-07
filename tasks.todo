@@ -18,15 +18,14 @@ Version 1:
     ✔ Set the status of shipments to 'assigned' @done(22-02-06 23:57)
     ✔ Set the status of trucks to 'pending' @done(22-02-06 23:57)
   ☐ Add Truck returned button (on trucks list page)
-    ☐ Change truck status to 'available' 
-    ☐ Change associated shipments status to 'shipped' 
-    ☐ dissociate shipments from truck 
+    ☐ Change truck status to 'available'
+    ☐ Change associated shipments status to 'shipped'
+    ☐ dissociate shipments from truck
   ☐ Edit buttons => remove
 
+☐ Assign all with optimal affectations!
 Version 2: Add Leaflet Map:
-    ☐ Assign all with optimal affectations!
-    ☐ Estimate tasks
-    ☐ Draw the warehouse marker
-    ☐ Draw the clients markers
-    ☐ Add details to each client (...)
+    ✔ Draw the warehouse marker @done(22-02-07 22:10)
+    ✔ Draw the clients markers @done(22-02-07 22:25)
+    ✔ Add details to each client (...) @done(22-02-07 22:25)
     ☐ Draw paths of each truck

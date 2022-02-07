@@ -1,4 +1,5 @@
 import {getDistance} from 'geolib'
+import {COLORS} from '../constants'
 import {Client, Shipment, State, Truck} from './types'
 
 const jsonData = localStorage.getItem('store')
@@ -17,14 +18,19 @@ function makeInitialState(data: any): State {
     weight: x.items.reduce((w, item) => w + item.quantity * weights[item.product_id], 0),
   }))
 
-  const trucks: Truck[] = data.trucks.map((x) => ({
-    id: x.id,
-    weight: Number(x.max_weight),
-    availableWeight: Number(x.max_weight),
-    distance: 0,
-    shipments: [],
-    clients: [],
-  }))
+  let colorIndex = -1
+  const trucks: Truck[] = data.trucks.map((x) => {
+    colorIndex = (colorIndex + 1) % COLORS.length
+    return {
+      id: x.id,
+      color: COLORS[colorIndex],
+      weight: Number(x.max_weight),
+      availableWeight: Number(x.max_weight),
+      distance: 0,
+      shipments: [],
+      clients: [],
+    }
+  })
 
   const clients: Record<number, Client> = {}
   for (const x of data.clients) {
