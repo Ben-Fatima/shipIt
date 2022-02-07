@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Client;
+use App\Models\Product;
 use App\Models\Shipment;
+use App\Models\ShipmentItem;
 use App\Models\Truck;
 
 class shipmentController extends Controller
@@ -38,5 +40,26 @@ class shipmentController extends Controller
         $shipment = Shipment::findOrFail($id);
         $shipment->delete();
         return redirect('/shipments');
+    }
+    public function addProducts($id){
+        $shipment = Shipment::findOrFail($id);
+        $items = ShipmentItem::create([
+            'shipment_id' => $shipment->id
+        ]);
+        return view('shipments.products',[
+            'shipment' => $shipment,
+            'products' => Product::all(),
+            'items' => $items
+        ]);
+    }
+    public function assignProducts($id)
+    {
+        $shipment = Shipment::findOrFail($id);
+        $items = ShipmentItem::where('shipment_id',$shipment->id)->first();
+        $product = Product::where('name',request('product_id'))->first();
+        $items->product_id = $product->id;
+        $items->quantity = intval(request('quantity'));
+        $items->save();
+        return redirect('/shipments/'.$id);
     }
 }

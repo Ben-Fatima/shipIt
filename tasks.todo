@@ -18,9 +18,9 @@ Version 1:
     ✔ Set the status of shipments to 'assigned' @done(22-02-06 23:57)
     ✔ Set the status of trucks to 'pending' @done(22-02-06 23:57)
   ☐ Add Truck returned button (on trucks list page)
-    ☐ Change truck status to 'available'
-    ☐ Change associated shipments status to 'shipped'
-    ☐ dissociate shipments from truck
+    ☐ Change truck status to 'available' 
+    ☐ Change associated shipments status to 'shipped' 
+    ☐ dissociate shipments from truck 
   ☐ Edit buttons => remove
 
 Version 2: Add Leaflet Map:
