@@ -51,7 +51,7 @@ function generateAssignments(state: State): Truck[] {
 function updateTruck(state: State, truck: Truck) {
   truck.availableWeight = truck.weight - R.sum(truck.shipments.map((x) => x.weight))
   const clients = new Set(truck.shipments.map((x) => state.clients[x.clientId]))
-  truck.clients = getOptimalLocalPath(state, [...clients])
+  truck.clients = getOptimalPath(state, [...clients])
   truck.distance = getPathDistance(state, truck.clients)
   return state
 }
@@ -73,48 +73,35 @@ function getPathDistance(state: State, clients: Client[]) {
 }
 
 function getOptimalLocalPath(state: State, clients: Client[], maxIterations = 100) {
-  console.log(
-    `finding optiomal path for`,
-    clients.map((x) => x.name)
-  )
   let bestPath = clients
   let bestDistance = getPathDistance(state, clients)
-  console.log(
-    `best path`,
-    bestPath.map((x) => x.name)
-  )
-  console.log(`best distance`, bestDistance)
   for (let i = 0; i < maxIterations; i++) {
     let changed = false
     const similar = similarPaths(bestPath)
-    console.log('checking similar paths', similar)
     for (const path of similar) {
       const d = getPathDistance(state, path)
-      console.log(
-        'distance of path',
-        path.map((x) => x.name),
-        'is',
-        d
-      )
       if (d < bestDistance) {
-        console.log(`found new best path`)
         bestDistance = d
         bestPath = path
         changed = true
-        console.log(
-          `best path`,
-          bestPath.map((x) => x.name)
-        )
-        console.log(`best distance`, bestDistance)
       }
     }
     if (!changed) break
   }
-  console.log(
-    `optimal path`,
-    bestPath.map((x) => x.name)
-  )
-  console.log(`optimal distance`, bestDistance)
+  return [bestPath, bestDistance] as const
+}
+
+function getOptimalPath(state: State, clients: Client[], maxIterations = 100) {
+  let bestPath = clients
+  let bestDistance = getPathDistance(state, clients)
+  for (let _ = 0; _ < maxIterations; _++) {
+    const [path, d] = getOptimalLocalPath(state, clients)
+    if (d < bestDistance) {
+      bestDistance = d
+      bestPath = path
+    }
+    shuffle(clients)
+  }
   return bestPath
 }
 
@@ -127,4 +114,14 @@ function similarPaths(clients: Client[]) {
     paths.push(path)
   }
   return paths
+}
+
+function shuffle<T>(items: T[]) {
+  let currentIndex = items.length
+  while (currentIndex != 0) {
+    const randomIndex = Math.floor(Math.random() * currentIndex)
+    currentIndex--
+    ;[items[currentIndex], items[randomIndex]] = [items[randomIndex], items[currentIndex]]
+  }
+  return items
 }

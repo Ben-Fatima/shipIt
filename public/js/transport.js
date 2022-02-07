@@ -2548,7 +2548,7 @@ function updateTruck(state, truck) {
   var clients = new Set(truck.shipments.map(function (x) {
     return state.clients[x.clientId];
   }));
-  truck.clients = getOptimalLocalPath(state, (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__spreadArray)([], (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__read)(clients), false));
+  truck.clients = getOptimalPath(state, (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__spreadArray)([], (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__read)(clients), false));
   truck.distance = getPathDistance(state, truck.clients);
   return state;
 }
@@ -2579,38 +2579,22 @@ function getOptimalLocalPath(state, clients, maxIterations) {
     maxIterations = 100;
   }
 
-  console.log("finding optiomal path for", clients.map(function (x) {
-    return x.name;
-  }));
   var bestPath = clients;
   var bestDistance = getPathDistance(state, clients);
-  console.log("best path", bestPath.map(function (x) {
-    return x.name;
-  }));
-  console.log("best distance", bestDistance);
 
   for (var i = 0; i < maxIterations; i++) {
     var changed = false;
     var similar = similarPaths(bestPath);
-    console.log('checking similar paths', similar);
 
     try {
       for (var similar_1 = (e_3 = void 0, (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__values)(similar)), similar_1_1 = similar_1.next(); !similar_1_1.done; similar_1_1 = similar_1.next()) {
         var path = similar_1_1.value;
         var d = getPathDistance(state, path);
-        console.log('distance of path', path.map(function (x) {
-          return x.name;
-        }), 'is', d);
 
         if (d < bestDistance) {
-          console.log("found new best path");
           bestDistance = d;
           bestPath = path;
           changed = true;
-          console.log("best path", bestPath.map(function (x) {
-            return x.name;
-          }));
-          console.log("best distance", bestDistance);
         }
       }
     } catch (e_3_1) {
@@ -2628,10 +2612,30 @@ function getOptimalLocalPath(state, clients, maxIterations) {
     if (!changed) break;
   }
 
-  console.log("optimal path", bestPath.map(function (x) {
-    return x.name;
-  }));
-  console.log("optimal distance", bestDistance);
+  return [bestPath, bestDistance];
+}
+
+function getOptimalPath(state, clients, maxIterations) {
+  if (maxIterations === void 0) {
+    maxIterations = 100;
+  }
+
+  var bestPath = clients;
+  var bestDistance = getPathDistance(state, clients);
+
+  for (var _ = 0; _ < maxIterations; _++) {
+    var _a = (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__read)(getOptimalLocalPath(state, clients), 2),
+        path = _a[0],
+        d = _a[1];
+
+    if (d < bestDistance) {
+      bestDistance = d;
+      bestPath = path;
+    }
+
+    shuffle(clients);
+  }
+
   return bestPath;
 }
 
@@ -2647,6 +2651,20 @@ function similarPaths(clients) {
   }
 
   return paths;
+}
+
+function shuffle(items) {
+  var _a;
+
+  var currentIndex = items.length;
+
+  while (currentIndex != 0) {
+    var randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    _a = (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__read)([items[randomIndex], items[currentIndex]], 2), items[currentIndex] = _a[0], items[randomIndex] = _a[1];
+  }
+
+  return items;
 }
 
 /***/ }),
