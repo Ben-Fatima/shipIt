@@ -42,24 +42,20 @@ class shipmentController extends Controller
         return redirect('/shipments');
     }
     public function addProducts($id){
-        $shipment = Shipment::findOrFail($id);
-        $items = ShipmentItem::create([
-            'shipment_id' => $shipment->id
-        ]);
+        
+        $shipment = Shipment::where('id',$id)->with('items.product')->first();
         return view('shipments.products',[
             'shipment' => $shipment,
             'products' => Product::all(),
-            'items' => $items
         ]);
     }
     public function assignProducts($id)
     {
-        $shipment = Shipment::findOrFail($id);
-        $items = ShipmentItem::where('shipment_id',$shipment->id)->first();
-        $product = Product::where('name',request('product_id'))->first();
-        $items->product_id = $product->id;
-        $items->quantity = intval(request('quantity'));
-        $items->save();
+        $item = ShipmentItem::create([
+            'shipment_id' => $id,
+            'product_id' => request('product_id'),
+            'quantity' => request('quantity')
+        ]);
         return redirect('/shipments/'.$id);
     }
 }

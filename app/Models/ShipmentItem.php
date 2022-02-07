@@ -10,8 +10,8 @@ class ShipmentItem extends Model
     use HasFactory;
     protected $guarded = [];
 
-    public function products(){
-        return $this->hasMany(Product::class);
+    public function product(){
+        return $this->belongsTo(Product::class);
     }
     public function shipment(){
         return $this->belongsTo(Shipment::class);

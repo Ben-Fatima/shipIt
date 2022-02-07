@@ -15,7 +15,7 @@ class CreateShipmentItemsTable extends Migration
     {
         Schema::create('shipment_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->nullable();
+            $table->foreignId('product_id');
             $table->foreignId('shipment_id');
             $table->bigInteger('quantity')->nullable();
             $table->timestamps();

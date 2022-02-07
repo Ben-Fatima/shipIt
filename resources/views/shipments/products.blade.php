@@ -9,7 +9,7 @@
     <select class="block w-full px-4 py-2 border rounded italic" name="product_id">
       <option>Choose the product</option>
       @foreach($products as $product)
-      <option>{{$product->name}}</option>
+      <option value="{{$product->id}}">{{$product->name}}</option>
       @endforeach
     </select>
     <label class="block py-4 text-gray-800 text-lg font-medium">Quantity </label>
@@ -23,9 +23,6 @@
           Name
         </th>
         <th class="px-5 py-3 border-b-2 border-gray-200 bg-stone-100 text-left text-sm font-semibold text-gray-600 tracking-wider uppercase">
-          Dimensions
-        </th>
-        <th class="px-5 py-3 border-b-2 border-gray-200 bg-stone-100 text-left text-sm font-semibold text-gray-600 tracking-wider uppercase">
           Quantity
         </th>
         <th class="px-5 py-3 border-b-2 border-gray-200 bg-stone-100 text-left text-sm font-semibold text-gray-600 tracking-wider uppercase">
@@ -34,20 +31,16 @@
       </tr>
     </thead>
     <tbody>
-      @foreach ($items as $item)
+      @foreach ($shipment->items as $item)
       <tr>
-        @if(isset($item->name) && isset($item->width) && isset($item->quantity))
         <td class="p-5 border-b border-gray-200">
-          {{$item->name}}
-        </td>
-        <td class="p-5 border-b border-gray-200">
-          {{$item->width}}
+          {{$item->product->name}}
         </td>
         <td class="p-5 border-b border-gray-200">
           {{$item->quantity}}
         </td>
         <td class="p-5 border-b border-gray-200">
-          <form method="POST" action="/recipes/edit/{{$recipe->id}}/{{$ingredient->id}}">
+          <form method="POST" action="">
             @method('DELETE') @csrf
             <button
               class="
@@ -67,7 +60,6 @@
             >
               <i class="fas fa-trash px-1"></i>Delete
             </button>
-            @endif
           </form>
         </td>
       </tr>
