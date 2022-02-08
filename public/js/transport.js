@@ -2476,38 +2476,18 @@ function removeShipmentFromTruck(state, truck, shipment) {
   return state;
 }
 function assignAll(state) {
-  var trucks = generateAssignments(state);
-  state.trucks = trucks;
-  var assignedShipmentsIds = new Set(trucks.flatMap(function (x) {
-    return x.shipments.map(function (x) {
-      return x.id;
-    });
-  }));
-  state.shipments = state.shipments.filter(function (x) {
-    return !assignedShipmentsIds.has(x.id);
-  });
-  return state;
-}
-
-function generateAssignments(state) {
-  var e_1, _a, e_2, _b;
-
-  var trucks = (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__spreadArray)([], (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__read)(state.trucks), false);
-
-  var _loop_1 = function _loop_1(shipment) {
-    var freeTruck = trucks.find(function (x) {
-      return x.availableWeight >= shipment.weight;
-    });
-    if (freeTruck == null) return "continue";
-    freeTruck.shipments.push(shipment);
-    freeTruck.availableWeight -= shipment.weight;
-  };
+  var e_1, _a, _b;
 
   try {
-    for (var _c = (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__values)(state.shipments), _d = _c.next(); !_d.done; _d = _c.next()) {
-      var shipment = _d.value;
+    for (var _c = (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__values)(state.trucks), _d = _c.next(); !_d.done; _d = _c.next()) {
+      var truck = _d.value;
 
-      _loop_1(shipment);
+      (_b = state.shipments).push.apply(_b, (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__spreadArray)([], (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__read)(truck.shipments), false));
+
+      truck.shipments = [];
+      truck.availableWeight = truck.weight;
+      truck.clients = [];
+      truck.distance = 0;
     }
   } catch (e_1_1) {
     e_1 = {
@@ -2521,10 +2501,29 @@ function generateAssignments(state) {
     }
   }
 
+  state.trucks = getOptimalAssignments(state);
+  var assignedShipmentsIds = new Set(state.trucks.flatMap(function (x) {
+    return x.shipments.map(function (x) {
+      return x.id;
+    });
+  }));
+  state.shipments = state.shipments.filter(function (x) {
+    return !assignedShipmentsIds.has(x.id);
+  });
+  return state;
+}
+
+function getRandomAssignments(state) {
+  var e_2, _a, e_3, _b, e_4, _c;
+
+  var trucks = ramda__WEBPACK_IMPORTED_MODULE_0__.clone(state.trucks);
+  var index = {};
+
   try {
-    for (var trucks_1 = (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__values)(trucks), trucks_1_1 = trucks_1.next(); !trucks_1_1.done; trucks_1_1 = trucks_1.next()) {
-      var truck = trucks_1_1.value;
-      updateTruck(state, truck);
+    for (var _d = (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__values)(state.shipments), _e = _d.next(); !_e.done; _e = _d.next()) {
+      var shipment = _e.value;
+      if (!index[shipment.clientId]) index[shipment.clientId] = [];
+      index[shipment.clientId].push(shipment);
     }
   } catch (e_2_1) {
     e_2 = {
@@ -2532,13 +2531,224 @@ function generateAssignments(state) {
     };
   } finally {
     try {
-      if (trucks_1_1 && !trucks_1_1.done && (_b = trucks_1["return"])) _b.call(trucks_1);
+      if (_e && !_e.done && (_a = _d["return"])) _a.call(_d);
     } finally {
       if (e_2) throw e_2.error;
     }
   }
 
+  var packs = Object.values(index);
+
+  var _loop_1 = function _loop_1(pack) {
+    var _f;
+
+    var weight = ramda__WEBPACK_IMPORTED_MODULE_0__.sum(pack.map(function (x) {
+      return x.weight;
+    }));
+    var availableTrucks = trucks.filter(function (x) {
+      return x.availableWeight >= weight;
+    });
+    var randomIndex = Math.floor(availableTrucks.length * Math.random());
+    var truck = availableTrucks[randomIndex];
+
+    (_f = truck.shipments).push.apply(_f, (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__spreadArray)([], (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__read)(pack), false));
+
+    truck.availableWeight -= weight;
+  };
+
+  try {
+    for (var packs_1 = (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__values)(packs), packs_1_1 = packs_1.next(); !packs_1_1.done; packs_1_1 = packs_1.next()) {
+      var pack = packs_1_1.value;
+
+      _loop_1(pack);
+    }
+  } catch (e_3_1) {
+    e_3 = {
+      error: e_3_1
+    };
+  } finally {
+    try {
+      if (packs_1_1 && !packs_1_1.done && (_b = packs_1["return"])) _b.call(packs_1);
+    } finally {
+      if (e_3) throw e_3.error;
+    }
+  }
+
+  try {
+    for (var trucks_1 = (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__values)(trucks), trucks_1_1 = trucks_1.next(); !trucks_1_1.done; trucks_1_1 = trucks_1.next()) {
+      var truck = trucks_1_1.value;
+      updateTruck(state, truck);
+    }
+  } catch (e_4_1) {
+    e_4 = {
+      error: e_4_1
+    };
+  } finally {
+    try {
+      if (trucks_1_1 && !trucks_1_1.done && (_c = trucks_1["return"])) _c.call(trucks_1);
+    } finally {
+      if (e_4) throw e_4.error;
+    }
+  }
+
   return trucks;
+}
+
+function getOptimalAssignments(state, maxIterations) {
+  if (maxIterations === void 0) {
+    maxIterations = 10;
+  }
+
+  var bestAssignment = getRandomAssignments(state);
+  var bestDistance = ramda__WEBPACK_IMPORTED_MODULE_0__.sum(bestAssignment.map(function (x) {
+    return x.distance;
+  }));
+
+  for (var i = 0; i < maxIterations; i++) {
+    var _a = (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__read)(getOptimalLocalAssignments(state), 2),
+        a = _a[0],
+        d = _a[1];
+
+    if (d < bestDistance) {
+      bestDistance = d;
+      bestAssignment = a;
+    }
+  }
+
+  return bestAssignment;
+}
+
+function getOptimalLocalAssignments(state, maxIterations) {
+  var e_5, _a;
+
+  if (maxIterations === void 0) {
+    maxIterations = 10;
+  }
+
+  var bestAssignment = getRandomAssignments(state);
+  var bestDistance = ramda__WEBPACK_IMPORTED_MODULE_0__.sum(bestAssignment.map(function (x) {
+    return x.distance;
+  }));
+
+  for (var i = 0; i < maxIterations; i++) {
+    var changed = false;
+    var similar = similarAssignments(state, bestAssignment);
+
+    try {
+      for (var similar_1 = (e_5 = void 0, (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__values)(similar)), similar_1_1 = similar_1.next(); !similar_1_1.done; similar_1_1 = similar_1.next()) {
+        var a = similar_1_1.value;
+        var d = ramda__WEBPACK_IMPORTED_MODULE_0__.sum(a.map(function (x) {
+          return x.distance;
+        }));
+
+        if (d < bestDistance) {
+          bestDistance = d;
+          bestAssignment = a;
+          changed = true;
+        }
+      }
+    } catch (e_5_1) {
+      e_5 = {
+        error: e_5_1
+      };
+    } finally {
+      try {
+        if (similar_1_1 && !similar_1_1.done && (_a = similar_1["return"])) _a.call(similar_1);
+      } finally {
+        if (e_5) throw e_5.error;
+      }
+    }
+
+    if (!changed) break;
+  }
+
+  return [bestAssignment, bestDistance];
+}
+
+function similarAssignments(state, trucks) {
+  var solutions = [];
+
+  for (var i = 0; i < trucks.length - 1; i++) {
+    var truckA = trucks[i];
+    var packsA = Object.values(truckA.shipments.reduce(function (index, x) {
+      if (!index[x.clientId]) index[x.clientId] = [];
+      index[x.clientId].push(x);
+      return index;
+    }, {}));
+
+    for (var j = 1; j < trucks.length; j++) {
+      var truckB = trucks[j];
+      var packsB = Object.values(truckB.shipments.reduce(function (index, x) {
+        if (!index[x.clientId]) index[x.clientId] = [];
+        index[x.clientId].push(x);
+        return index;
+      }, {}));
+
+      var _loop_2 = function _loop_2(k) {
+        var _a;
+
+        var pack = packsA[k];
+        var weight = ramda__WEBPACK_IMPORTED_MODULE_0__.sum(pack.map(function (x) {
+          return x.weight;
+        }));
+        if (truckB.availableWeight < weight) return "continue";
+        var solution = ramda__WEBPACK_IMPORTED_MODULE_0__.clone(trucks);
+        var a = solution[i];
+        var b = solution[j];
+        var ids = new Set(pack.map(function (x) {
+          return x.id;
+        }));
+        a.shipments = a.shipments.filter(function (x) {
+          return !ids.has(x.id);
+        });
+        a.availableWeight += weight;
+        updateTruck(state, a);
+
+        (_a = b.shipments).push.apply(_a, (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__spreadArray)([], (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__read)(pack), false));
+
+        b.availableWeight -= weight;
+        updateTruck(state, b);
+        solutions.push(solution);
+      };
+
+      for (var k = 0; k < packsA.length; k++) {
+        _loop_2(k);
+      }
+
+      var _loop_3 = function _loop_3(k) {
+        var _b;
+
+        var pack = packsB[k];
+        var weight = ramda__WEBPACK_IMPORTED_MODULE_0__.sum(pack.map(function (x) {
+          return x.weight;
+        }));
+        if (truckA.availableWeight < weight) return "continue";
+        var solution = ramda__WEBPACK_IMPORTED_MODULE_0__.clone(trucks);
+        var b = solution[i];
+        var a = solution[j];
+        var ids = new Set(pack.map(function (x) {
+          return x.id;
+        }));
+        a.shipments = a.shipments.filter(function (x) {
+          return !ids.has(x.id);
+        });
+        a.availableWeight += weight;
+        updateTruck(state, a);
+
+        (_b = b.shipments).push.apply(_b, (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__spreadArray)([], (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__read)(pack), false));
+
+        b.availableWeight -= weight;
+        updateTruck(state, b);
+        solutions.push(solution);
+      };
+
+      for (var k = 0; k < packsB.length; k++) {
+        _loop_3(k);
+      }
+    }
+  }
+
+  return solutions;
 }
 
 function updateTruck(state, truck) {
@@ -2573,7 +2783,7 @@ function getPathDistance(state, clients) {
 }
 
 function getOptimalLocalPath(state, clients, maxIterations) {
-  var e_3, _a;
+  var e_6, _a;
 
   if (maxIterations === void 0) {
     maxIterations = 100;
@@ -2587,8 +2797,8 @@ function getOptimalLocalPath(state, clients, maxIterations) {
     var similar = similarPaths(bestPath);
 
     try {
-      for (var similar_1 = (e_3 = void 0, (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__values)(similar)), similar_1_1 = similar_1.next(); !similar_1_1.done; similar_1_1 = similar_1.next()) {
-        var path = similar_1_1.value;
+      for (var similar_2 = (e_6 = void 0, (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__values)(similar)), similar_2_1 = similar_2.next(); !similar_2_1.done; similar_2_1 = similar_2.next()) {
+        var path = similar_2_1.value;
         var d = getPathDistance(state, path);
 
         if (d < bestDistance) {
@@ -2597,15 +2807,15 @@ function getOptimalLocalPath(state, clients, maxIterations) {
           changed = true;
         }
       }
-    } catch (e_3_1) {
-      e_3 = {
-        error: e_3_1
+    } catch (e_6_1) {
+      e_6 = {
+        error: e_6_1
       };
     } finally {
       try {
-        if (similar_1_1 && !similar_1_1.done && (_a = similar_1["return"])) _a.call(similar_1);
+        if (similar_2_1 && !similar_2_1.done && (_a = similar_2["return"])) _a.call(similar_2);
       } finally {
-        if (e_3) throw e_3.error;
+        if (e_6) throw e_6.error;
       }
     }
 
@@ -2617,7 +2827,7 @@ function getOptimalLocalPath(state, clients, maxIterations) {
 
 function getOptimalPath(state, clients, maxIterations) {
   if (maxIterations === void 0) {
-    maxIterations = 100;
+    maxIterations = 10;
   }
 
   var bestPath = clients;
